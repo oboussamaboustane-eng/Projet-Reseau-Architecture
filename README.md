@@ -78,4 +78,3 @@ Configuration validee sur le Switch S1 (Flags SU et P).
 
 ---
 *Projet academique.*
-EOF
