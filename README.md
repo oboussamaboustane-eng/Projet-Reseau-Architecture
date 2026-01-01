@@ -1,51 +1,51 @@
-# Architecture Réseau d'Entreprise : Commutation, Routage et WAN
+# Architecture Reseau d'Entreprise : Commutation, Routage et WAN
 
 ![Cisco Packet Tracer](https://img.shields.io/badge/Technologie-Cisco%20Packet%20Tracer-blue)
 ![Status](https://img.shields.io/badge/Etat-Finalise-success)
 
-## Informations Générales
+## Informations Generales
 
-Ce dépôt héberge les ressources techniques et la documentation d'un projet de conception d'infrastructure réseau. Le projet simule un réseau d'entreprise hiérarchique interconnectant un siège social à des sites distants via une liaison WAN.
+Ce depot heberge les ressources techniques et la documentation d'un projet de conception d'infrastructure reseau. Le projet simule un reseau d'entreprise hierarchique interconnectant un siege social a des sites distants via une liaison WAN.
 
 * **Auteur :** [Boustane Oussama](https://www.linkedin.com/in/oussama-boustane-22a990298/)
-* **Contexte :** Module Réseaux Informatiques
-* **Année Académique :** 2025/2026
+* **Contexte :** Module Reseaux Informatiques
+* **Annee Academique :** 2025/2026
 
 ---
 
 ## Objectifs Techniques
 
-L'objectif principal est de démontrer la mise en œuvre des technologies suivantes :
-1.  **Commutation (Switching) :** Segmentation par VLANs, protocoles de trunking (802.1Q) et agrégation de liens (LACP).
-2.  **Routage Inter-VLAN :** Configuration "Router-on-a-Stick" pour la communication entre sous-réseaux.
-3.  **Interconnexion WAN :** Liaisons séries et protocoles de routage pour l'accès aux sites distants.
-4.  **Optimisation :** Résumé de routes (Route Summarization) pour alléger les tables de routage.
+L'objectif principal est de demontrer la mise en oeuvre des technologies suivantes :
+1. **Commutation (Switching) :** Segmentation par VLANs, protocoles de trunking (802.1Q) et agregation de liens (LACP).
+2. **Routage Inter-VLAN :** Configuration "Router-on-a-Stick" pour la communication entre sous-reseaux.
+3. **Interconnexion WAN :** Liaisons series et protocoles de routage pour l'acces aux sites distants.
+4. **Optimisation :** Resume de routes (Route Summarization) pour alleger les tables de routage.
 
 ---
 
 ## Topologie et Architecture
 
-Le réseau s'articule autour d'un cœur de réseau (R1) gérant le routage inter-VLAN et l'accès WAN, et d'une couche distribution/accès assurée par des commutateurs interconnectés.
+Le reseau s'articule autour d'un coeur de reseau (R1) gerant le routage inter-VLAN et l'acces WAN, et d'une couche distribution/acces assuree par des commutateurs interconnectes.
 
-![Schéma de la Topologie Globale](images/topologie_globale.png)
+![Schema de la Topologie Globale](images/topologie_globale.png)
 
-### Inventaire du Matériel Simulé
+### Inventaire du Materiel Simule
 
-| Équipement | Modèle | Rôle Principal |
+| Equipement | Modele | Role Principal |
 | :--- | :--- | :--- |
 | **Routeur R1** | Cisco 2811 | Passerelle LAN & Sortie WAN |
 | **Routeur R2** | Cisco 2811 | Routeur de transit (FAI/WAN) |
 | **Routeur R3** | Cisco 2811 | Destination distante (Simulation Internet) |
-| **Switch S1** | Cisco 2960 | Distribution & Agrégation |
-| **Switch S2** | Cisco 2960 | Accès Clients & Management |
+| **Switch S1** | Cisco 2960 | Distribution & Agregation |
+| **Switch S2** | Cisco 2960 | Acces Clients & Management |
 
 ---
 
 ## Plan d'Adressage IP (VLSM)
 
-Un adressage optimisé a été appliqué pour économiser les adresses IPv4, notamment sur les liaisons point-à-point (/30).
+Un adressage optimise a ete applique pour economiser les adresses IPv4, notamment sur les liaisons point-a-point (/30).
 
-| Périphérique | Interface | Adresse IP | Masque (CIDR) | Description |
+| Peripherique | Interface | Adresse IP | Masque (CIDR) | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **R1** | Fa0/0.10 | 172.18.10.14 | /28 | Passerelle VLAN 10 |
 | | Fa0/0.20 | 172.18.20.14 | /28 | Passerelle VLAN 20 |
@@ -57,9 +57,9 @@ Un adressage optimisé a été appliqué pour économiser les adresses IPv4, not
 
 ---
 
-## Points Clés de la Configuration
+## Points Cles de la Configuration
 
-### 1. Agrégation de Liens (EtherChannel)
+### 1. Agregation de Liens (EtherChannel)
 Configuration du protocole LACP (Link Aggregation Control Protocol) entre les commutateurs S1 et S2 pour assurer la redondance et augmenter la bande passante.
 
 ```text
