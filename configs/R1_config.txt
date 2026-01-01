@@ -1,0 +1,72 @@
+! Configuration Backup - Routeur R1 (Cœur de Réseau)
+! Projet: Architecture Reseau - Routage Inter-VLAN & WAN
+! Date: 2026
+!
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R1
+!
+no ip cef
+no ipv6 cef
+!
+license udi pid CISCO2811/K9 sn FTX1017R010-
+!
+spanning-tree mode pvst
+!
+interface FastEthernet0/0
+ no ip address
+ duplex auto
+ speed auto
+!
+interface FastEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 172.18.10.14 255.255.255.240
+!
+interface FastEthernet0/0.20
+ encapsulation dot1Q 20
+ ip address 172.18.20.14 255.255.255.240
+!
+interface FastEthernet0/0.30
+ encapsulation dot1Q 30
+ ip address 172.18.30.14 255.255.255.240
+!
+interface FastEthernet0/0.50
+ encapsulation dot1Q 50 native
+ ip address 172.18.50.14 255.255.255.240
+!
+interface FastEthernet0/0.60
+ encapsulation dot1Q 60
+ ip address 172.18.60.14 255.255.255.240
+!
+interface FastEthernet0/1
+ description Link-to-Admin-PC
+ ip address 192.168.100.1 255.255.255.0
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ description Link-to-R2
+ ip address 10.0.30.177 255.255.255.252
+ clock rate 2000000
+!
+interface Serial0/0/1
+ description Link-to-R3
+ ip address 10.0.30.181 255.255.255.252
+ clock rate 2000000
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip classless
+ip route 10.0.30.129 255.255.255.255 10.0.30.182 
+!
+line con 0
+line aux 0
+line vty 0 4
+ login
+!
+end

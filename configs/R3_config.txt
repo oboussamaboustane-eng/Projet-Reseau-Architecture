@@ -1,0 +1,51 @@
+! Configuration Backup - Routeur R3 (Destination / Internet Simulé)
+! Projet: Architecture Reseau - Routage Inter-VLAN & WAN
+! Date: 2026
+!
+version 15.1
+no service timestamps log datetime msec
+no service timestamps debug datetime msec
+no service password-encryption
+!
+hostname R3
+!
+no ip cef
+no ipv6 cef
+!
+license udi pid CISCO2811/K9 sn FTX1017BVBO-
+!
+spanning-tree mode pvst
+!
+interface Loopback0
+ description Simulated-Internet-Target
+ ip address 10.0.30.129 255.255.255.255
+!
+interface FastEthernet0/0
+ no ip address
+ shutdown
+!
+interface FastEthernet0/1
+ no ip address
+ shutdown
+!
+interface Serial0/0/0
+ description Link-to-R1
+ ip address 10.0.30.182 255.255.255.252
+!
+interface Serial0/0/1
+ description Link-to-R2-Redundancy
+ ip address 10.0.30.186 255.255.255.252
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip classless
+ip route 0.0.0.0 0.0.0.0 10.0.30.181 
+!
+line con 0
+line aux 0
+line vty 0 4
+ login
+!
+end
