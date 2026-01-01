@@ -1,97 +1,124 @@
-# Architecture Reseau d'Entreprise : Commutation, Routage et WAN
+#  Network Architecture: Switching, Routing & WAN
 
-![Cisco Packet Tracer](https://img.shields.io/badge/Technologie-Cisco%20Packet%20Tracer-blue)
-![Status](https://img.shields.io/badge/Etat-Finalise-success)
+![Cisco Packet Tracer](https://img.shields.io/badge/Technology-Cisco%20Packet%20Tracer-blue)
+![Status](https://img.shields.io/badge/Status-Completed-success)
 
-## Informations Generales
+## Project Overview
+This repository contains the technical resources and documentation for a simulated enterprise network infrastructure project. It implements a hierarchical network design interconnecting a headquarters site with remote locations over a WAN link.
 
-Ce depot heberge les ressources techniques et la documentation d'un projet de conception d'infrastructure reseau. Le projet simule un reseau d'entreprise hierarchique interconnectant un siege social a des sites distants via une liaison WAN.
-
-* **Auteur :** [Boustane Oussama](https://www.linkedin.com/in/oussama-boustane-22a990298/)
-* **Contexte :** Module Reseaux Informatiques
-* **Annee Academique :** 2025/2026
-
----
-
-## Objectifs Techniques
-
-L'objectif principal est de demontrer la mise en oeuvre des technologies suivantes :
-1. **Commutation (Switching) :** Segmentation par VLANs, protocoles de trunking (802.1Q) et agregation de liens (LACP).
-2. **Routage Inter-VLAN :** Configuration "Router-on-a-Stick" pour la communication entre sous-reseaux.
-3. **Interconnexion WAN :** Liaisons series et protocoles de routage pour l'acces aux sites distants.
-4. **Optimisation :** Resume de routes (Route Summarization) pour alleger les tables de routage.
+* **Author:** [Boustane Oussama](https://www.linkedin.com/in/oussama-boustane-22a990298/)
+* **Context:** Networks & Systems Module
+* **Academic Year:** 2025/2026
 
 ---
 
-## Topologie et Architecture
+## Technical Objectives
+The primary goal is to demonstrate the implementation of the following technologies:
+1. **Switching:** Segmentation using VLANs, trunking protocols (802.1Q), and link aggregation (LACP).
+2. **Inter-VLAN Routing:** Configuration of a "Router-on-a-Stick" for cross-subnet communication.
+3. **WAN Interconnection:** Serial links and routing protocols for remote site access.
+4. **Optimization:** Route Summarization to reduce routing table overhead.
 
-Le reseau s'articule autour d'un coeur de reseau (R1) gerant le routage inter-VLAN et l'acces WAN, et d'une couche distribution/acces assuree par des commutateurs interconnectes.
+---
 
-![Schema de la Topologie Globale](images/topologie_globale.png)
+## Topology & Architecture
+The network is built around a core router (R1) handling inter-VLAN routing and WAN access, supported by a distribution/access layer of interconnected switches.
 
-### Inventaire du Materiel Simule
+![Global Topology Diagram](images/topologie_globale.png)
 
-| Equipement | Modele | Role Principal |
+### Simulated Hardware Inventory
+
+| Device | Model | Primary Role |
 | :--- | :--- | :--- |
-| **Routeur R1** | Cisco 2811 | Passerelle LAN & Sortie WAN |
-| **Routeur R2** | Cisco 2811 | Routeur de transit (FAI/WAN) |
-| **Routeur R3** | Cisco 2811 | Destination distante (Simulation Internet) |
-| **Switch S1** | Cisco 2960 | Distribution & Agregation |
-| **Switch S2** | Cisco 2960 | Acces Clients & Management |
+| Router R1 | Cisco 2811 | LAN Gateway & WAN Edge |
+| Router R2 | Cisco 2811 | Transit Router (ISP/WAN) |
+| Router R3 | Cisco 2811 | Remote Destination (Simulated Internet) |
+| Switch S1 | Cisco 2960 | Distribution & Aggregation |
+| Switch S2 | Cisco 2960 | Client & Management Access |
 
 ---
 
-## Plan d'Adressage IP (VLSM)
+## IP Addressing Plan (VLSM)
+An optimized addressing scheme was applied to conserve IPv4 addresses, especially on point-to-point links (/30).
 
-Un adressage optimise a ete applique pour economiser les adresses IPv4, notamment sur les liaisons point-a-point (/30).
-
-| Peripherique | Interface | Adresse IP | Masque (CIDR) | Description |
+| Device | Interface | IP Address | Mask (CIDR) | Description |
 | :--- | :--- | :--- | :--- | :--- |
-| **R1** | Fa0/0.10 | 172.18.10.14 | /28 | Passerelle VLAN 10 |
-| | Fa0/0.20 | 172.18.20.14 | /28 | Passerelle VLAN 20 |
-| | Fa0/0.30 | 172.18.30.14 | /28 | Passerelle VLAN 30 |
-| | S0/0/0 | 10.0.30.177 | /30 | Liaison vers R2 |
-| **R2** | S0/0/0 | 10.0.30.178 | /30 | Liaison vers R1 |
-| **R3** | Loopback0 | 10.0.30.129 | /32 | IP Cible (Test) |
-| **S2** | Vlan60 | 172.18.60.2 | /28 | Interface de Gestion |
+| R1 | Fa0/0.10 | 172.18.10.14 | /28 | Gateway VLAN 10 |
+| R1 | Fa0/0.20 | 172.18.20.14 | /28 | Gateway VLAN 20 |
+| R1 | Fa0/0.30 | 172.18.30.14 | /28 | Gateway VLAN 30 |
+| R1 | S0/0/0 | 10.0.30.177 | /30 | Link to R2 |
+| R2 | S0/0/0 | 10.0.30.178 | /30 | Link to R1 |
+| R3 | Loopback0 | 10.0.30.129 | /32 | Target IP (Test) |
+| S2 | Vlan60 | 172.18.60.2 | /28 | Management Interface |
 
 ---
 
-## Points Cles de la Configuration
+## Key Configuration Points
 
-### 1. Agregation de Liens (EtherChannel)
-Configuration du protocole LACP (Link Aggregation Control Protocol) entre les commutateurs S1 et S2 pour assurer la redondance et augmenter la bande passante.
+### 1. Link Aggregation (EtherChannel)
+Configuration of LACP (Link Aggregation Control Protocol) between switches S1 and S2 for redundancy and increased bandwidth.
 
-
-! Extrait de configuration S1
+```
+! S1 Configuration Snippet
 interface range FastEthernet0/21-22
  channel-group 1 mode active
 !
 interface Port-channel1
  switchport mode trunk
  switchport trunk native vlan 50
+```
 
-### 2. Routage Inter-VLAN
-Utilisation de sous-interfaces sur le routeur R1 avec encapsulation 802.1Q.
+### 2. Inter-VLAN Routing
+Utilization of sub-interfaces on router R1 with 802.1Q encapsulation.
 
-! Extrait de configuration R1
+```
+! R1 Configuration Snippet
 interface FastEthernet0/0.10
  encapsulation dot1Q 10
  ip address 172.18.10.14 255.255.255.240
----
-### Validation et Tests
-Test de Connectivite (Ping & Traceroute)
-Le test ci-dessous valide le cheminement complet des paquets depuis le reseau local (VLAN 10) jusqu'au reseau distant simule (R3), traversant la passerelle R1 et le reseau WAN.
-
-Verification de l'EtherChannel
-La commande show etherchannel summary confirme que le Port-Channel est actif (SU) et que les ports physiques sont agreges via le protocole LACP (P).
-
-Contenu du Depot
-configs/ : Fichiers de configuration brute (.txt) extraits des equipements.
-
-images/ : Captures d'ecran justificatives de la topologie et des tests.
-
-Architecture_Reseau.pkt : Fichier de simulation Cisco Packet Tracer.
+```
 
 ---
-Projet academique - Boustane Oussama.
+
+## Validation & Testing
+
+### Connectivity Test (Ping & Traceroute)
+The following test validates the complete packet path from the local network (VLAN 10) to the simulated remote network (R3), traversing the R1 gateway and the WAN.
+
+```
+PC1> ping 10.0.30.129
+
+Pinging 10.0.30.129 with 32 bytes of data:
+
+Reply from 10.0.30.129: bytes=32 time=1ms TTL=126
+Reply from 10.0.30.129: bytes=32 time=2ms TTL=126
+...
+```
+
+### EtherChannel Verification
+The `show etherchannel summary` command confirms that the Port-Channel is active (SU) and that physical ports are aggregated via the LACP protocol (P).
+
+```
+S1# show etherchannel summary
+Flags:  D - down        P - bundled in port-channel
+...
+```
+
+---
+
+## Repository Structure
+
+```
+├── configs/                 # Configuration files (.txt)
+├── images/                  # Topology diagrams and test screenshots
+├── Architecture_Reseau.pkt  # Cisco Packet Tracer simulation file
+└── README.md                # This file
+```
+
+---
+
+## License
+This project is for educational purposes as part of an academic module.
+
+Academic Project - Boustane Oussama 2025/2026
+```
