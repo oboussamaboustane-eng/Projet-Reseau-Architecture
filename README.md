@@ -1,68 +1,83 @@
-# 1. On vide le fichier et on écrit la première partie
-cat << 'EOF' > README.md
-# Architecture Reseau d'Entreprise : Commutation, Routage et WAN
+# Architecture Réseau d'Entreprise : Commutation, Routage et WAN
 
 ![Cisco Packet Tracer](https://img.shields.io/badge/Technologie-Cisco%20Packet%20Tracer-blue)
-![Status](https://img.shields.io/badge/Etat-Finalise-success)
+![Status](https://img.shields.io/badge/État-Finalisé-success)
 
-## 1. Vue d'Ensemble du Projet
+## Informations Générales
 
-Ce depot contient la documentation technique et les fichiers de configuration relatifs a la conception d'une infrastructure reseau hierarchique. L'architecture simule l'interconnexion d'un siege social avec des sites distants a travers une liaison WAN, en respectant les standards de l'industrie.
+Ce dépôt héberge les ressources techniques et la documentation d'un projet de conception d'infrastructure réseau.  
+Le projet simule un réseau d'entreprise hiérarchique interconnectant un siège social à des sites distants via une liaison WAN.
 
-* **Auteur :** [Boustane Oussama](https://www.linkedin.com/in/oussama-boustane-22a990298/)
-* **Contexte :** Module Reseaux Informatiques
-* **Annee Academique :** 2025/2026
-
----
-
-## 2. Perimetre Technique
-
-Ce projet valide l'acquisition des competences suivantes :
-1. **Commutation Avancee :** Implementation de VLANs, trunking (802.1Q) et agregation de liens (LACP).
-2. **Routage Inter-VLAN :** Configuration "Router-on-a-Stick" assurant la communication entre les segments reseau.
-3. **Infrastructure WAN :** Deploiment de liaisons series et routage dynamique.
-4. **Optimisation :** Mise en oeuvre du resume de routes (Route Summarization).
+- **Auteur :** [Boustane Oussama](https://www.linkedin.com/in/oussama-boustane-22a990298/)
+- **Contexte :** Module Réseaux Informatiques
+- **Année Académique :** 2025 / 2026
 
 ---
 
-## 3. Topologie et Materiel
+## Objectifs Techniques
 
-Le coeur du reseau repose sur un routeur central (R1) gérant les passerelles logiques, connecte a une couche de distribution/acces.
+L'objectif principal est de démontrer la mise en œuvre des technologies suivantes :
 
-![Schema de la Topologie Globale](images/topologie_globale.png)
+1. **Commutation (Switching)**  
+   - VLANs  
+   - Trunking IEEE 802.1Q  
+   - Agrégation de liens (EtherChannel – LACP)
 
-### Inventaire des Equipements
+2. **Routage Inter-VLAN**  
+   - Configuration *Router-on-a-Stick*
 
-| Equipement | Modele | Role Principal |
-| :--- | :--- | :--- |
+3. **Interconnexion WAN**  
+   - Liaisons série point-à-point  
+   - Routage entre sites distants
+
+4. **Optimisation du Routage**  
+   - Résumé de routes (*Route Summarization*)
+
+---
+
+## Topologie et Architecture
+
+Le réseau est organisé autour :
+- d’un **routeur central (R1)** assurant le routage inter-VLAN et l’accès WAN,
+- d’une **couche distribution / accès** composée de commutateurs interconnectés.
+
+![Schéma de la Topologie Globale](images/topologie_globale.png)
+
+---
+
+## Inventaire du Matériel Simulé
+
+| Équipement | Modèle | Rôle Principal |
+|----------|--------|----------------|
 | **Routeur R1** | Cisco 2811 | Passerelle LAN & Sortie WAN |
-| **Routeur R2** | Cisco 2811 | Routeur de transit (FAI/WAN) |
-| **Routeur R3** | Cisco 2811 | Destination distante (Simulation Internet) |
-| **Switch S1** | Cisco 2960 | Distribution & Agregation |
-| **Switch S2** | Cisco 2960 | Acces Clients & Management |
+| **Routeur R2** | Cisco 2811 | Routeur de transit (FAI / WAN) |
+| **Routeur R3** | Cisco 2811 | Site distant (Simulation Internet) |
+| **Switch S1** | Cisco 2960 | Distribution & Agrégation |
+| **Switch S2** | Cisco 2960 | Accès Clients & Management |
 
 ---
 
-## 4. Plan d'Adressage (VLSM)
+## Plan d’Adressage IP (VLSM)
 
-| Peripherique | Interface | Adresse IP | Masque (CIDR) | Description |
-| :--- | :--- | :--- | :--- | :--- |
+Un plan d’adressage optimisé a été appliqué afin d’économiser les adresses IPv4, notamment sur les liaisons point-à-point (/30).
+
+| Périphérique | Interface | Adresse IP | Masque | Description |
+|-------------|-----------|------------|--------|-------------|
 | **R1** | Fa0/0.10 | 172.18.10.14 | /28 | Passerelle VLAN 10 |
 | | Fa0/0.20 | 172.18.20.14 | /28 | Passerelle VLAN 20 |
 | | Fa0/0.30 | 172.18.30.14 | /28 | Passerelle VLAN 30 |
 | | S0/0/0 | 10.0.30.177 | /30 | Liaison vers R2 |
 | **R2** | S0/0/0 | 10.0.30.178 | /30 | Liaison vers R1 |
-| **R3** | Loopback0 | 10.0.30.129 | /32 | IP Cible (Test) |
-| **S2** | Vlan60 | 172.18.60.2 | /28 | Interface de Gestion |
+| **R3** | Loopback0 | 10.0.30.129 | /32 | IP cible (Test) |
+| **S2** | Vlan60 | 172.18.60.2 | /28 | Interface de gestion |
 
 ---
 
-## 5. Implementation Technique
+## Points Clés de la Configuration
 
-Cette section met en evidence des extraits de configuration critiques.
+### 1. Agrégation de Liens (EtherChannel – LACP)
 
-### A. Agregation de Liens (EtherChannel LACP)
-Assure la redondance et augmente la bande passante.
+Configuration de l’agrégation de liens entre les commutateurs **S1** et **S2** afin d’assurer la redondance et d’augmenter la bande passante.
 
 ```text
 ! Extrait de configuration S1
@@ -72,13 +87,39 @@ interface range FastEthernet0/21-22
 interface Port-channel1
  switchport mode trunk
  switchport trunk native vlan 50
-cat << 'EOF' >> README.md
+2. Routage Inter-VLAN (Router-on-a-Stick)
+Utilisation de sous-interfaces sur le routeur R1 avec encapsulation IEEE 802.1Q.
 
-### B. Routage Inter-VLAN (Router-on-a-Stick)
-Permet le routage entre les differents VLANs via une interface physique unique subdivisee.
-
-```text
+text
+Copy code
 ! Extrait de configuration R1
 interface FastEthernet0/0.10
  encapsulation dot1Q 10
  ip address 172.18.10.14 255.255.255.240
+Validation et Tests
+Test de Connectivité (Ping & Traceroute)
+Les tests de connectivité valident le cheminement complet des paquets depuis le réseau local (VLAN 10) vers le site distant simulé (R3), en passant par le routeur central R1 et le réseau WAN.
+
+Vérification de l’EtherChannel
+La commande suivante permet de confirmer :
+
+l’état SU du Port-Channel,
+
+l’agrégation correcte des interfaces via LACP (P).
+
+text
+Copy code
+show etherchannel summary
+Contenu du Dépôt
+configs/
+Fichiers de configuration brute (.txt) extraits des équipements
+
+images/
+Captures d’écran de la topologie et des tests
+
+Architecture_Reseau.pkt
+Fichier de simulation Cisco Packet Tracer
+
+Auteur
+Projet académique réalisé par Boustane Oussama
+© 2025 – 2026
