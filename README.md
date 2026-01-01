@@ -1,3 +1,4 @@
+# 1. On vide le fichier et on écrit la première partie
 cat << 'EOF' > README.md
 # Architecture Reseau d'Entreprise : Commutation, Routage et WAN
 
@@ -17,11 +18,10 @@ Ce depot contient la documentation technique et les fichiers de configuration re
 ## 2. Perimetre Technique
 
 Ce projet valide l'acquisition des competences suivantes :
-
-1. **Commutation Avancee :** Implementation de VLANs, trunking (802.1Q) et agregation de liens (LACP) pour optimiser la bande passante.
+1. **Commutation Avancee :** Implementation de VLANs, trunking (802.1Q) et agregation de liens (LACP).
 2. **Routage Inter-VLAN :** Configuration "Router-on-a-Stick" assurant la communication entre les segments reseau.
-3. **Infrastructure WAN :** Deploiment de liaisons series et routage dynamique pour l'interconnexion de sites.
-4. **Optimisation :** Mise en oeuvre du resume de routes (Route Summarization) pour la performance des tables de routage.
+3. **Infrastructure WAN :** Deploiment de liaisons series et routage dynamique.
+4. **Optimisation :** Mise en oeuvre du resume de routes (Route Summarization).
 
 ---
 
@@ -45,8 +45,6 @@ Le coeur du reseau repose sur un routeur central (R1) gérant les passerelles lo
 
 ## 4. Plan d'Adressage (VLSM)
 
-L'allocation des adresses IP respecte la methode VLSM pour optimiser l'espace d'adressage disponible.
-
 | Peripherique | Interface | Adresse IP | Masque (CIDR) | Description |
 | :--- | :--- | :--- | :--- | :--- |
 | **R1** | Fa0/0.10 | 172.18.10.14 | /28 | Passerelle VLAN 10 |
@@ -61,10 +59,10 @@ L'allocation des adresses IP respecte la methode VLSM pour optimiser l'espace d'
 
 ## 5. Implementation Technique
 
-Cette section met en evidence des extraits de configuration critiques pour le fonctionnement du reseau.
+Cette section met en evidence des extraits de configuration critiques.
 
 ### A. Agregation de Liens (EtherChannel LACP)
-Assure la redondance et augmente la bande passante entre les commutateurs.
+Assure la redondance et augmente la bande passante.
 
 ```text
 ! Extrait de configuration S1
