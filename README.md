@@ -1,81 +1,100 @@
 cat << 'EOF' > README.md
-# Architecture Reseau d'Entreprise : Switching, Routing & WAN
+<div align="center">
 
-![Cisco Packet Tracer](https://img.shields.io/badge/Cisco-Packet%20Tracer-blue?logo=cisco&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Completed-success)
+# 📡 Architecture Réseau d'Entreprise
+### Switching • Routing Inter-VLAN • WAN
 
-## Description du Projet
-Ce projet, realise dans le cadre du module **Reseaux Informatiques**, consiste en la conception et le deploiement d'une infrastructure reseau complete simulant un siege social connecte a des sites distants.
+![Cisco Packet Tracer](https://img.shields.io/badge/Technologie-Cisco%20Packet%20Tracer-005571?style=for-the-badge&logo=cisco&logoColor=white)
+![Status](https://img.shields.io/badge/État-Finalisé-2ea44f?style=for-the-badge)
+![License](https://img.shields.io/badge/Module-Réseaux-333333?style=for-the-badge)
 
-L'objectif est de demontrer la maitrise des protocoles de **Commutation (Switching)**, de **Routage Inter-VLAN** et d'**Interconnexion WAN**.
+<br>
 
-* **Etudiant :** Boustane Oussama 
-* **Annee :** 2025/2026
+<p align="center">
+  <b>Conception et déploiement d'une infrastructure réseau hiérarchique<br>simulant un siège social connecté à des sites distants.</b>
+</p>
+
+[**Boustane Oussama**](https://www.linkedin.com/in/oussama-boustane-22a990298/)
+<br>
+*Année Académique : 2025/2026*
+
+</div>
 
 ---
 
-## Topologie et Architecture
+## 🔹 Topologie et Architecture
 
-Le reseau est constitue de :
-* **3 Routeurs Cisco 2811** (Zone WAN et Coeur de reseau).
-* **2 Switchs Cisco 2960-24TT** (Zone LAN Access/Distribution).
-* **Postes Clients** repartis sur differents VLANs.
+Le réseau s'articule autour d'un **Cœur de réseau (Core)** routé et d'une couche **Distribution/Accès** commutée.
 
-![Topologie du Reseau](images/topologie_globale.png)
+<div align="center">
+  <img src="images/topologie_globale.png" alt="Topologie Globale" width="800">
+</div>
 
-### Inventaire du Materiel
-| Equipement | Modele | Role Principal |
-| :--- | :--- | :--- |
-| **R1** | Cisco 2811 | Passerelle LAN & Sortie WAN |
-| **R2** | Cisco 2811 | Routeur de Transit (FAI) |
-| **R3** | Cisco 2811 | Site Distant (Internet) |
-| **S1** | Cisco 2960 | Distribution & Agregation |
-| **S2** | Cisco 2960 | Acces Clients |
+### ➤ Inventaire Matériel
 
-### Plan d'Adressage IP
-| Peripherique | Interface | IP / Masque | Description |
+| Equipement | Modèle | Rôle Principal | Zone |
 | :--- | :--- | :--- | :--- |
-| **R1** | Fa0/0.10 | 172.18.10.14 /28 | GW VLAN 10 |
-| | S0/0/0 | 10.0.30.177 /30 | Vers R2 |
-| **R3** | Loopback0| 10.0.30.129 /32 | Serveur Test |
-| **S2** | Vlan60 | 172.18.60.2 /28 | Management |
+| **R1** | Cisco 2811 | Passerelle LAN & Sortie WAN | Core |
+| **R2** | Cisco 2811 | Routeur de Transit (FAI) | WAN |
+| **R3** | Cisco 2811 | Site Distant (Internet) | Remote |
+| **S1** | Cisco 2960 | Distribution & Agrégation | LAN |
+| **S2** | Cisco 2960 | Accès Clients | LAN |
 
 ---
 
-## Fonctionnalites Configurees
+## 🔹 Plan d'Adressage (VLSM)
+
+Optimisation de l'espace d'adressage pour garantir l'évolutivité.
+
+| Périphérique | Interface | Adresse IP / Masque | Description |
+| :--- | :--- | :--- | :--- |
+| **R1** | Fa0/0.10 | `172.18.10.14 /28` | GW VLAN 10 (RH) |
+| | S0/0/0 | `10.0.30.177 /30` | Vers R2 (FAI) |
+| **R2** | S0/0/0 | `10.0.30.178 /30` | Vers R1 (Siège) |
+| **R3** | Loopback0| `10.0.30.129 /32` | Serveur Test |
+| **S2** | Vlan60 | `172.18.60.2 /28` | Management |
+
+---
+
+## 🔹 Implémentation Technique
 
 ### 1. Commutation (Switching)
-* **VLANs :** Segmentation du reseau en 5 VLANs (10, 20, 30, 50, 60).
-* **EtherChannel (LACP) :** Agregation de liens entre S1 et S2.
-* **Trunking (802.1Q) :** Transport des VLANs.
+> Segmentation logique et agrégation de bande passante.
 
-### 2. Routage (Routing)
-* **Router-on-a-Stick :** Configuration de sous-interfaces sur R1.
-* **Routage WAN :** Liaisons series avec encapsulation HDLC.
-* **Routage Statique & Resume :** Optimisation des tables de routage.
+* **VLANs :** Déploiement des VLANs 10, 20, 30, 50, 60.
+* **EtherChannel (LACP) :** Lien redondant entre S1 et S2.
+* **Trunking (802.1Q) :** Transport multi-VLANs.
 
----
+```text
+! Extrait Config S1 (LACP)
+interface range FastEthernet0/21-22
+ channel-group 1 mode active
+!
+interface Port-channel1
+ switchport mode trunk
+2. Routage (Routing)
+Interconnexion des réseaux locaux et distants.
 
-## Preuves de Fonctionnement
+Router-on-a-Stick : Routage inter-VLAN via sous-interfaces.
 
-### Test de Connectivite WAN (Ping/Traceroute)
-Le traceroute ci-dessous demontre que les paquets traversent correctement le reseau local, le routeur central (R1) pour atteindre la cible distante sur Internet (simulee).
+Protocole WAN : Encapsulation HDLC sur liaisons séries.
 
-![Test Traceroute](images/test_wan_tracert.png)
+Plaintext
 
-### Verification EtherChannel (LACP)
-Configuration validee sur le Switch S1 (Flags SU et P).
+! Extrait Config R1 (ROAS)
+interface FastEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 172.18.10.14 255.255.255.240
+🔹 Preuves de Fonctionnement
+1. Connectivité WAN (Traceroute)
+Le test valide le cheminement : LAN ➤ R1 ➤ WAN (R2) ➤ Cible (R3).
 
-![Preuve EtherChannel](images/preuve_etherchannel.png)
+2. Validation EtherChannel
+Le statut SU (Layer2 / In Use) et le protocole P (LACP) confirment le succès de l'agrégation.
 
----
+📂 Contenu du Dépôt
+configs/ : Fichiers de configuration brute (.txt).
 
-## Structure du Depot
+images/ : Captures d'écran justificatives.
 
-* `/configs` : Fichiers de configuration (Show running-config).
-* `/images` : Captures d'ecran du projet.
-* `Architecture_Reseau.pkt` : Le fichier de simulation Packet Tracer.
-
----
-*Projet academique.*
-EOF
+Architecture_Reseau.pkt : Fichier source Packet Tracer.
