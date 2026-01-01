@@ -72,3 +72,13 @@ interface range FastEthernet0/21-22
 interface Port-channel1
  switchport mode trunk
  switchport trunk native vlan 50
+cat << 'EOF' >> README.md
+
+### B. Routage Inter-VLAN (Router-on-a-Stick)
+Permet le routage entre les differents VLANs via une interface physique unique subdivisee.
+
+```text
+! Extrait de configuration R1
+interface FastEthernet0/0.10
+ encapsulation dot1Q 10
+ ip address 172.18.10.14 255.255.255.240
