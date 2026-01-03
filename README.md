@@ -1,4 +1,3 @@
-cat << 'EOF' > README.md
 # Architecture Reseau d'Entreprise : Switching, Routing & WAN
 
 ![Cisco Packet Tracer](https://img.shields.io/badge/Cisco-Packet%20Tracer-blue?logo=cisco&logoColor=white)
